@@ -72,9 +72,6 @@ train_df, val_df = train_test_split(df, stratify=df.tag, test_size=test_size, ra
 # %% [markdown] id="WuCrsbxbNkSV"
 # ## 🔍 Exploratory Data Analysis (EDA)
 
-# %% [markdown] id="eOJ3nlEgnSTJ"
-# Exploratory data analysis to understand the signals and nuances of our dataset. It's a cyclical process that can be done at various points of our development process (before/after labeling, preprocessing, etc.) depending on how well the problem is defined.
-
 # %% id="tHdQmqTBNkSV"
 from collections import Counter
 import matplotlib.pyplot as plt
@@ -185,9 +182,6 @@ df.head()
 # %% [markdown]
 # ### Label encoding
 
-# %% [markdown]
-# We need to encode our data into numerical values so that our models can process them. We'll start by encoding our text labels into unique indices.
-
 # %%
 # Label to index
 tags = train_df.tag.unique().tolist()
@@ -235,11 +229,6 @@ def tokenize(batch):
     tokenizer = BertTokenizer.from_pretrained("allenai/scibert_scivocab_uncased", return_dict=False)
     encoded_inputs = tokenizer(batch["text"].tolist(), return_tensors="np", padding="longest")
     return dict(ids=encoded_inputs["input_ids"], masks=encoded_inputs["attention_mask"], targets=np.array(batch["tag"]))
-
-
-# %%
-# Tokenization
-tokenize(df.head(1))
 
 
 # %% [markdown]
