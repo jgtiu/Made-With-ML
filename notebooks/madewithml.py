@@ -650,6 +650,9 @@ def train_loop_per_worker(config):
 # ## 🗂️ Configurations
 
 # %%
+from madewithml.config import EFS_DIR
+
+# %%
 # Train loop config
 train_loop_config = {
     "dropout_p": 0.5,
