@@ -65,7 +65,7 @@ from dotenv import load_dotenv; load_dotenv()
 # Initialize Ray
 if ray.is_initialized():
     ray.shutdown()
-ray.init()
+ray.init(object_store_memory=2 * 10**9)
 
 # %%
 ray.cluster_resources()
@@ -675,14 +675,14 @@ scaling_config = ScalingConfig(
 # %%
 # Run config
 checkpoint_config = CheckpointConfig(num_to_keep=1, checkpoint_score_attribute="val_loss", checkpoint_score_order="min")
-run_config = RunConfig(name="llm", checkpoint_config=checkpoint_config, storage_path=os.path.join(os.path.expanduser("~"), EFS_DIR))
+run_config = RunConfig(name="llm", checkpoint_config=checkpoint_config, storage_path=os.path.join(os.path.expanduser("~"), "ray_results"))
 
 # %% [markdown]
 # ## 🚂 Training
 
 # %%
 # Dataset
-ds = load_data()
+ds = load_data(50)
 train_ds, val_ds = stratify_split(ds, stratify="tag", test_size=test_size)
 
 # %%
@@ -892,7 +892,7 @@ run_config = RunConfig(
 
 # %%
 # Dataset
-ds = load_data()
+ds = load_data(50)
 train_ds, val_ds = stratify_split(ds, stratify="tag", test_size=test_size)
 
 # %%
@@ -967,16 +967,23 @@ from urllib.parse import urlparse
 
 # %%
 def get_best_checkpoint(run_id):
-    artifact_dir = urlparse(mlflow.get_run(run_id).info.artifact_uri).path  # get path from mlflow
+    artifact_dir = urlparse(mlflow.get_run(run_id).info.artifact_uri).path.lstrip("/")  # get path from mlflow
     results = Result.from_path(artifact_dir)
     return results.best_checkpoints[0][0]
+
+# %%
+# hardcoded becuase of memory or some runtime error here
 
 
 # %%
 # Artifacts
-best_checkpoint = get_best_checkpoint(run_id=best_run.run_id)
+# best_checkpoint = get_best_checkpoint(run_id=best_run.run_id)
+best_checkpoint = get_best_checkpoint(run_id='35abb29fa8914e00bf74a890e30d4993')
 predictor = TorchPredictor.from_checkpoint(best_checkpoint)
 preprocessor = predictor.get_preprocessor()
+
+# %% [markdown]
+# ## memory or some runtime error here!
 
 # %%
 # Evaluate on test split
