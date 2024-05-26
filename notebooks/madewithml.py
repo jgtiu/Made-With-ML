@@ -675,7 +675,7 @@ scaling_config = ScalingConfig(
 # %%
 # Run config
 checkpoint_config = CheckpointConfig(num_to_keep=1, checkpoint_score_attribute="val_loss", checkpoint_score_order="min")
-run_config = RunConfig(name="llm", checkpoint_config=checkpoint_config, storage_path=os.path.join(os.path.expanduser("~"), "ray_results"))
+run_config = RunConfig(name="llm", checkpoint_config=checkpoint_config, storage_path=os.path.join(os.path.expanduser("~"), EFS_DIR))
 
 # %% [markdown]
 # ## 🚂 Training
@@ -867,7 +867,7 @@ import time
 
 # %%
 # Config MLflow
-MODEL_REGISTRY = Path("/tmp/mlflow")
+MODEL_REGISTRY = Path(f"{EFS_DIR}/mlflow")
 Path(MODEL_REGISTRY).mkdir(parents=True, exist_ok=True)
 MLFLOW_TRACKING_URI = "file:///" + str(MODEL_REGISTRY.absolute())
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
