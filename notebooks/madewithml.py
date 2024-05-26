@@ -85,11 +85,6 @@ resources_per_worker={"CPU": 1, "GPU": 0}
 # resources_per_worker={"CPU": 1, "GPU": 0}
 # ```
 
-# %%
-# Storage
-EFS_DIR = f"/efs/shared_storage/madewithml/{os.environ['GITHUB_USERNAME']}"
-print (EFS_DIR)
-
 # %% [markdown]
 # # Data
 
