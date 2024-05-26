@@ -39,20 +39,9 @@ ray.init()
 # %%
 ray.cluster_resources()
 
-# %% [markdown]
-# These cluster resources only reflect our head node ([m5.2xlarge](https://instances.vantage.sh/aws/ec2/m5.2xlarge)). But recall in our [setup lesson](https://madewithml.com/courses/mlops/setup/) that our [compute configuration](https://madewithml.com/courses/mlops/setup/#compute) that we also added [g4dn.xlarge](https://instances.vantage.sh/aws/ec2/g4dn.xlarge) worker nodes (each has 1 GPU and 4 CPU) to our cluster. But because we set `min_workers=0`, our worker nodes will autoscale ( up to `max_workers`) as they're needed for specific workloads (ex. training). 
-
 # %%
 num_workers = 1
 resources_per_worker={"CPU": 1, "GPU": 0}
-
-# %% [markdown]
-# If you are running this on a local laptop (no GPU), use the CPU count from `ray.cluster_resources()` to set your resources. For example if your machine has 10 CPUs:
-#
-# ```python
-# num_workers = 6  # prefer to do a few less than total available CPU (1 for head node + 1 for background tasks)
-# resources_per_worker={"CPU": 1, "GPU": 0}
-# ```
 
 # %% [markdown]
 # # Data
@@ -76,21 +65,9 @@ df.head()
 from sklearn.model_selection import train_test_split
 
 # %%
-# Value counts
-df.tag.value_counts()
-
-# %%
 # Split dataset
 test_size = 0.2
 train_df, val_df = train_test_split(df, stratify=df.tag, test_size=test_size, random_state=1234)
-
-# %%
-# Train value counts
-train_df.tag.value_counts()
-
-# %%
-# Validation (adjusted) value counts
-val_df.tag.value_counts() * int((1-test_size) / test_size)
 
 # %% [markdown] id="WuCrsbxbNkSV"
 # ## 🔍 Exploratory Data Analysis (EDA)
