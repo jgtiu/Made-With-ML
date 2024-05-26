@@ -645,17 +645,14 @@ def train_loop_per_worker(config):
 # ## 🗂️ Configurations
 
 # %%
-from madewithml.config import EFS_DIR
-
-# %%
 # Train loop config
 train_loop_config = {
     "dropout_p": 0.5,
     "lr": 1e-4,
     "lr_factor": 0.8,
     "lr_patience": 3,
-    "num_epochs": 10,
-    "batch_size": 256,
+    "num_epochs": 2,
+    "batch_size": 32,
     "num_classes": num_classes,
 }
 
@@ -670,7 +667,7 @@ scaling_config = ScalingConfig(
 # %%
 # Run config
 checkpoint_config = CheckpointConfig(num_to_keep=1, checkpoint_score_attribute="val_loss", checkpoint_score_order="min")
-run_config = RunConfig(name="llm", checkpoint_config=checkpoint_config, storage_path=EFS_DIR)
+run_config = RunConfig(name="llm", checkpoint_config=checkpoint_config, storage_path=os.path.join(os.path.expanduser("~"), "ray_results"))
 
 # %% [markdown]
 # ## 🚂 Training
@@ -862,9 +859,9 @@ import time
 
 # %%
 # Config MLflow
-MODEL_REGISTRY = Path(f"{EFS_DIR}/mlflow")
+MODEL_REGISTRY = Path("/tmp/mlflow")
 Path(MODEL_REGISTRY).mkdir(parents=True, exist_ok=True)
-MLFLOW_TRACKING_URI = "file://" + str(MODEL_REGISTRY.absolute())
+MLFLOW_TRACKING_URI = "file:///" + str(MODEL_REGISTRY.absolute())
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 print (mlflow.get_tracking_uri())
 
