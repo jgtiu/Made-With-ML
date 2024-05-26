@@ -74,9 +74,8 @@ ray.cluster_resources()
 # These cluster resources only reflect our head node ([m5.2xlarge](https://instances.vantage.sh/aws/ec2/m5.2xlarge)). But recall in our [setup lesson](https://madewithml.com/courses/mlops/setup/) that our [compute configuration](https://madewithml.com/courses/mlops/setup/#compute) that we also added [g4dn.xlarge](https://instances.vantage.sh/aws/ec2/g4dn.xlarge) worker nodes (each has 1 GPU and 4 CPU) to our cluster. But because we set `min_workers=0`, our worker nodes will autoscale ( up to `max_workers`) as they're needed for specific workloads (ex. training). 
 
 # %%
-# Workers (1 g4dn.xlarge)
 num_workers = 1
-resources_per_worker={"CPU": 3, "GPU": 1}
+resources_per_worker={"CPU": 1, "GPU": 0}
 
 # %% [markdown]
 # If you are running this on a local laptop (no GPU), use the CPU count from `ray.cluster_resources()` to set your resources. For example if your machine has 10 CPUs:
